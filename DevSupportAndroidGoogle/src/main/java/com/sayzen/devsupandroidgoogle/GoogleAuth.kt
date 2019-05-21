@@ -16,10 +16,10 @@ object GoogleAuth {
         getClient { googleApiClient ->
             val googleSignInResult = Auth.GoogleSignInApi.silentSignIn(googleApiClient).await(500, TimeUnit.MILLISECONDS)
 
-            if (googleSignInResult.isSuccess && googleSignInResult.signInAccount != null){
+            if (googleSignInResult.isSuccess && googleSignInResult.signInAccount != null) {
                 ToolsThreads.main { onComplete.invoke(googleSignInResult.signInAccount) }
                 googleApiClient.disconnect()
-            }else {
+            } else {
 
                 ToolsIntent.startIntentForResult(Auth.GoogleSignInApi.getSignInIntent(googleApiClient)) { resultCode, intent ->
                     val result = Auth.GoogleSignInApi.getSignInResultFromIntent(intent)
@@ -56,13 +56,13 @@ object GoogleAuth {
     private fun getClient(onConnect: (GoogleApiClient) -> Unit) {
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken("276237287601-6e9aoah4uivbjh6lnn1l9hna6taljd9u.apps.googleusercontent.com")
-            .build()
+                .requestIdToken("276237287601-6e9aoah4uivbjh6lnn1l9hna6taljd9u.apps.googleusercontent.com")
+                .build()
 
         val client = GoogleApiClient.Builder(SupAndroid.activity!!)
-            .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-            .setGravityForPopups(Gravity.BOTTOM or Gravity.CENTER)
-            .build()
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .setGravityForPopups(Gravity.BOTTOM or Gravity.CENTER)
+                .build()
 
         ToolsThreads.thread {
             client.blockingConnect()

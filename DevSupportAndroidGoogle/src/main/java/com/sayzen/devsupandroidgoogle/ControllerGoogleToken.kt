@@ -3,7 +3,7 @@ package com.sayzen.devsupandroidgoogle
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.sup.dev.java.libs.api_simple.client.TokenProvider
 
-object ControllerToken {
+object ControllerGoogleToken {
 
     private var googleAccount: GoogleSignInAccount? = null
     private var onLoginFailed: ()->Unit = {}
@@ -21,15 +21,15 @@ object ControllerToken {
         return object : TokenProvider {
 
             override fun getToken(callbackSource: (String?)->Unit) {
-                ControllerToken.getToken(callbackSource)
+                ControllerGoogleToken.getToken(callbackSource)
             }
 
             override fun clearToken() {
-                ControllerToken.clearToken()
+                ControllerGoogleToken.clearToken()
             }
 
             override fun onLoginFailed() {
-                ControllerToken.onLoginFailed()
+                ControllerGoogleToken.onLoginFailed()
             }
         }
     }
@@ -45,7 +45,7 @@ object ControllerToken {
             return
         }
         GoogleAuth.getGoogleToken { googleAccount ->
-            ControllerToken.googleAccount = googleAccount
+            ControllerGoogleToken.googleAccount = googleAccount
             onResult.invoke(googleAccount?.idToken)
         }
     }
