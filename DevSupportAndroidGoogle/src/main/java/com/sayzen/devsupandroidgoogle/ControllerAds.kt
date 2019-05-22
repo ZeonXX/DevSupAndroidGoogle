@@ -10,10 +10,8 @@ import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.MobileAds
 import com.sup.dev.android.app.SupAndroid
 import com.sup.dev.android.tools.ToolsAndroid
-import com.sup.dev.android.tools.ToolsResources
 import com.sup.dev.java.classes.items.ItemNullable
 import com.sup.dev.java.libs.debug.err
-import com.sup.dev.java.libs.debug.log
 import com.sup.dev.java.tools.ToolsThreads
 import java.net.URL
 

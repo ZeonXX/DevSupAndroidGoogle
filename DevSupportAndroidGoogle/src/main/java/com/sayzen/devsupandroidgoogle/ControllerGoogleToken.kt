@@ -5,6 +5,7 @@ import com.sup.dev.java.libs.api_simple.client.TokenProvider
 
 object ControllerGoogleToken {
 
+    var tokenPostExecutor:(String?, callback:(String?)->Unit)->Unit={token,callback -> callback.invoke(token)}
     private var googleAccount: GoogleSignInAccount? = null
     private var onLoginFailed: ()->Unit = {}
 
@@ -21,7 +22,11 @@ object ControllerGoogleToken {
         return object : TokenProvider {
 
             override fun getToken(callbackSource: (String?)->Unit) {
-                ControllerGoogleToken.getToken(callbackSource)
+                ControllerGoogleToken.getToken{
+                    tokenPostExecutor.invoke(it){ token->
+                        callbackSource.invoke(token)
+                    }
+                }
             }
 
             override fun clearToken() {
