@@ -3,8 +3,14 @@ package com.sayzen.devsupandroidgoogle
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.sup.dev.java.tools.ToolsThreads
 
 class GoogleNotifications : FirebaseMessagingService() {
+
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        super.onMessageReceived(remoteMessage)
+        ToolsThreads.main { onReceive(remoteMessage) }
+    }
 
     override fun onNewToken(s: String?) {
         super.onNewToken(s)
@@ -20,8 +26,10 @@ class GoogleNotifications : FirebaseMessagingService() {
             GoogleNotifications.onToken = onToken
             GoogleNotifications.onReceive = onReceive
 
-            val token = FirebaseInstanceId.getInstance().token
-            onToken?.invoke(token)
+            FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener { instanceIdResult ->
+                val token = instanceIdResult.token
+                onToken?.invoke(token)
+            }
         }
 
         internal fun onReceive(remoteMessage: RemoteMessage) {
