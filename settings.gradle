@@ -1,2 +1,0 @@
-include ':DevSupportAndroidGoogle', ':DevSupJava', ':DevSupportAndroid'
-project(':DevSupportAndroid').projectDir = new File('DevSupAndroid/DevSupportAndroid')
