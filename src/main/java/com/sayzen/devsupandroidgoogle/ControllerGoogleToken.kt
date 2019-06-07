@@ -13,11 +13,14 @@ import java.util.concurrent.TimeUnit
 
 object ControllerGoogleToken {
 
+    private var token = ""
+
     var tokenPostExecutor:(String?, callback:(String?)->Unit)->Unit={token,callback -> callback.invoke(token)}
     private var googleAccount: GoogleSignInAccount? = null
     private var onLoginFailed: ()->Unit = {}
 
-    fun init(onLoginFailed: ()->Unit){
+    fun init(token:String, onLoginFailed: ()->Unit){
+        this.token = token
         this.onLoginFailed = onLoginFailed
     }
 
@@ -115,7 +118,7 @@ object ControllerGoogleToken {
     private fun getClient(onConnect: (GoogleApiClient) -> Unit) {
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("276237287601-6e9aoah4uivbjh6lnn1l9hna6taljd9u.apps.googleusercontent.com")
+                .requestIdToken(token)
                 .build()
 
         val client = GoogleApiClient.Builder(SupAndroid.activity!!)
