@@ -22,10 +22,10 @@ dependencies {
 
     api 'com.google.firebase:firebase-core:16.0.9'
     api 'com.google.firebase:firebase-messaging:18.0.0'
-    api 'com.crashlytics.sdk.android:crashlytics:2.10.0'
+    api 'com.crashlytics.sdk.android:crashlytics:2.10.1'
     api 'com.google.android.gms:play-services-auth:16.0.1'
     api 'com.google.android.ads.consent:consent-library:1.0.7'
-    api 'com.google.android.gms:play-services-ads:17.2.0'
+    api 'com.google.android.gms:play-services-ads:17.2.1'
 }
 
 
