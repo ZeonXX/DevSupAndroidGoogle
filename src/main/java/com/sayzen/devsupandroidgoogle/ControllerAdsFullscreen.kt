@@ -71,6 +71,7 @@ object ControllerAdsFullscreen {
 
 
     fun showIfNeed() {
+        ControllerAdsConsent.updateConsent()
         if (System.currentTimeMillis() <= lastShow + 1000 * 60 * 3) return
 
         if (ad!!.isLoaded && SupAndroid.activityIsVisible) {
