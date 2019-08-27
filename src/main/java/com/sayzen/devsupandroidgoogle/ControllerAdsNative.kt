@@ -2,12 +2,11 @@ package com.sayzen.devsupandroidgoogle
 
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
-import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.ads.formats.NativeAdOptions
 import com.google.android.gms.ads.formats.UnifiedNativeAd
 import com.sup.dev.android.app.SupAndroid
 import com.sup.dev.android.tools.ToolsAndroid
-import com.sup.dev.java.libs.debug.log
+import com.sup.dev.java.libs.debug.info
 
 object ControllerAdsNative {
 
@@ -33,12 +32,12 @@ object ControllerAdsNative {
 
         adLoader = AdLoader.Builder(SupAndroid.appContext, key_ad)
                 .forUnifiedNativeAd { ad : UnifiedNativeAd ->
-                    log("Ad is loaded " + ad)
+                    info("XAD", "Ad is loaded " + ad)
                     // Show the ad.
                 }
                 .withAdListener(object : AdListener() {
                     override fun onAdFailedToLoad(errorCode: Int) {
-                        log("onAdFailedToLoad " + errorCode)
+                        info("XAD",  "onAdFailedToLoad " + errorCode)
                         // Handle the failure by logging, altering the UI, and so on.
                     }
                 })

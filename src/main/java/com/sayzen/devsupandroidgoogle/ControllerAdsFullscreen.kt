@@ -12,6 +12,7 @@ import com.google.android.gms.ads.MobileAds
 import com.sup.dev.android.app.SupAndroid
 import com.sup.dev.android.tools.ToolsAndroid
 import com.sup.dev.java.libs.debug.err
+import com.sup.dev.java.libs.debug.info
 import com.sup.dev.java.tools.ToolsThreads
 
 object ControllerAdsFullscreen {
@@ -43,11 +44,11 @@ object ControllerAdsFullscreen {
         ad!!.adListener = object : AdListener() {
 
             override fun onAdLoaded() {
-                err("XX onAdLoaded")
+                info("XAd","onAdLoaded")
             }
 
             override fun onAdFailedToLoad(i: Int) {
-                err("XX onAdFailedToLoad $i")
+                info("XAd","onAdFailedToLoad $i")
                 ToolsThreads.main(1000 * 10) { loadAd() }
             }
 
