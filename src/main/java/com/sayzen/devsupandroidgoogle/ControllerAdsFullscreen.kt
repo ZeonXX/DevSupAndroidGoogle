@@ -61,7 +61,7 @@ object ControllerAdsFullscreen {
 
         val extras = Bundle()
         extras.putString("max_ad_content_rating", "T")
-        if (ConsentInformation.getInstance(SupAndroid.appContext).isRequestLocationInEeaOrUnknown && ControllerAdsConsent.status != ConsentStatus.PERSONALIZED) {
+        if (ConsentInformation.getInstance(SupAndroid.appContext).isRequestLocationInEeaOrUnknown && ControllerAds.status != ConsentStatus.PERSONALIZED) {
             extras.putString("npa", "1")
         }
         MobileAds.initialize(SupAndroid.appContext, ControllerAds.key_app)
@@ -72,7 +72,7 @@ object ControllerAdsFullscreen {
 
 
     fun showIfNeed() {
-        ControllerAdsConsent.updateConsent()
+        ControllerAds.updateConsent()
         if (System.currentTimeMillis() <= lastShow + 1000 * 60 * 3) return
 
         if (ad!!.isLoaded && SupAndroid.activityIsVisible) {
