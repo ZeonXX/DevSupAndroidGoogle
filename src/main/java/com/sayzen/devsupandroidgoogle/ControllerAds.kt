@@ -10,7 +10,7 @@ import java.net.URL
 
 object ControllerAds {
 
-    val DEBUG_AD = "ca-app-pub-3940256099942544/2247696110"
+    val DEBUG_AD = "xxxxxxxxxxxxxxxxxx"
 
     var isDebug = false
     var key_pub = ""
