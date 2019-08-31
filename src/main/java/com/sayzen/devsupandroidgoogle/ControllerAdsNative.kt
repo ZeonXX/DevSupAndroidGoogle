@@ -11,14 +11,16 @@ import com.sup.dev.java.libs.debug.info
 
 object ControllerAdsNative {
 
+    private val DEBUG_AD = "ca-app-pub-3940256099942544/2247696110"
+
     private var adLoader: AdLoader? = null
-    private var key_ads = arrayOf(ControllerAds.DEBUG_AD)
+    private var key_ads = arrayOf(DEBUG_AD)
     private var keyAd = 0
     private var ad: UnifiedNativeAd? = null
 
-    fun init() {
+    fun init(key_ads:Array<String>) {
         info("XAd", "init")
-        this.key_ads = if (ControllerAds.isDebug) arrayOf(ControllerAds.DEBUG_AD) else key_ads
+        this.key_ads = if (ControllerAds.isDebug) arrayOf(DEBUG_AD) else key_ads
         loadAd(true)
     }
 
@@ -34,7 +36,7 @@ object ControllerAdsNative {
         }
 
         info("XAd", "Start load")
-        adLoader = AdLoader.Builder(SupAndroid.appContext, if (BuildConfig.DEBUG) "ca-app-pub-3940256099942544/2247696110" else key_ad)
+        adLoader = AdLoader.Builder(SupAndroid.appContext,key_ad)
                 .forUnifiedNativeAd { ad: UnifiedNativeAd ->
                     info("XAd", "Ad loaded")
                     this.ad = ad

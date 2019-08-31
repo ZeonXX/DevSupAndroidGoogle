@@ -17,13 +17,15 @@ import com.sup.dev.java.tools.ToolsThreads
 
 object ControllerAdsFullscreen {
 
+    val DEBUG_AD = "xxxxxxxxxxxxxxxxxx"
+
     private var ad: InterstitialAd? = null
     private var lastShow = System.currentTimeMillis()
-    private var key_ads = arrayOf(ControllerAds.DEBUG_AD)
+    private var key_ads = arrayOf(DEBUG_AD)
     private var keyAd = 0
 
     fun init(key_ads: Array<String>) {
-        this.key_ads = if (ControllerAds.isDebug) arrayOf(ControllerAds.DEBUG_AD) else key_ads
+        this.key_ads = if (ControllerAds.isDebug) arrayOf(DEBUG_AD) else key_ads
         loadAd(true)
     }
 

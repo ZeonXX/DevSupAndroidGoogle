@@ -10,9 +10,7 @@ import java.net.URL
 
 object ControllerAds {
 
-    val DEBUG_AD = "xxxxxxxxxxxxxxxxxx"
-
-    var isDebug = false
+    var isDebug = BuildConfig.DEBUG
     var key_pub = ""
     var key_app = ""
 
