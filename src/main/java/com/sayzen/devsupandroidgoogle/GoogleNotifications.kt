@@ -12,7 +12,7 @@ class GoogleNotifications : FirebaseMessagingService() {
         ToolsThreads.main { onReceive(remoteMessage) }
     }
 
-    override fun onNewToken(s: String?) {
+    override fun onNewToken(s: String) {
         super.onNewToken(s)
         if (onToken != null) onToken!!.invoke(s)
     }
