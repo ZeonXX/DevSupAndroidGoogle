@@ -28,12 +28,9 @@ object ControllerAdsNative {
         if (adLoader != null && adLoader!!.isLoading) return
         if (!force && !ToolsAndroid.appIsVisible()) return
 
-        var key_ad = ""
-        if (!ControllerAds.isDebug) {
-            keyAd++
-            if (keyAd >= key_ads.size) keyAd = 0
-            key_ad = key_ads[keyAd]
-        }
+        if (keyAd >= key_ads.size) keyAd = 0
+        val key_ad = key_ads[keyAd]
+        keyAd++
 
         info("XAd", "Start load")
         adLoader = AdLoader.Builder(SupAndroid.appContext,key_ad)
