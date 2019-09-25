@@ -6,9 +6,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.GoogleApiClient
 import com.sup.dev.android.app.SupAndroid
+import com.sup.dev.android.tools.ToolsAndroid
 import com.sup.dev.android.tools.ToolsIntent
 import com.sup.dev.java.libs.api_simple.client.TokenProvider
 import com.sup.dev.java.tools.ToolsThreads
+import java.lang.RuntimeException
 import java.util.concurrent.TimeUnit
 
 object ControllerGoogleToken {
@@ -68,6 +70,11 @@ object ControllerGoogleToken {
         }
         getGoogleToken { googleAccount ->
             ControllerGoogleToken.googleAccount = googleAccount
+            if(ToolsAndroid.isDebug()){
+                if(googleAccount?.idToken == null || googleAccount.idToken!!.isEmpty()){
+                    throw RuntimeException("GOOGLE DONT'T PROVIDE TOKEN [${googleAccount?.idToken}] [${googleAccount}]")
+                }
+            }
             onResult.invoke(googleAccount?.idToken)
         }
     }
