@@ -17,26 +17,26 @@ object ControllerGoogleToken {
 
     private var token = ""
 
-    var tokenPostExecutor:(String?, callback:(String?)->Unit)->Unit={token,callback -> callback.invoke(token)}
+    var tokenPostExecutor: (String?, callback: (String?) -> Unit) -> Unit = { token, callback -> callback.invoke(token) }
     private var googleAccount: GoogleSignInAccount? = null
-    private var onLoginFailed: ()->Unit = {}
+    private var onLoginFailed: () -> Unit = {}
 
-    fun init(token:String, onLoginFailed: ()->Unit){
+    fun init(token: String, onLoginFailed: () -> Unit) {
         this.token = token
         this.onLoginFailed = onLoginFailed
     }
 
-    fun getGooglePhotoUrl():String?{
-        if(googleAccount == null || googleAccount!!.photoUrl == null) return null
-        return  googleAccount!!.photoUrl!!.toString()
+    fun getGooglePhotoUrl(): String? {
+        if (googleAccount == null || googleAccount!!.photoUrl == null) return null
+        return googleAccount!!.photoUrl!!.toString()
     }
 
     fun instanceTokenProvider(): TokenProvider {
         return object : TokenProvider {
 
-            override fun getToken(callbackSource: (String?)->Unit) {
-                ControllerGoogleToken.getToken{
-                    tokenPostExecutor.invoke(it){ token->
+            override fun getToken(callbackSource: (String?) -> Unit) {
+                ControllerGoogleToken.getToken {
+                    tokenPostExecutor.invoke(it) { token ->
                         callbackSource.invoke(token)
                     }
                 }
@@ -52,7 +52,7 @@ object ControllerGoogleToken {
         }
     }
 
-    fun logout(callback: (()->Unit)) {
+    fun logout(callback: (() -> Unit)) {
         getClient { googleApiClient ->
             ToolsThreads.main {
                 googleAccount = null
@@ -63,19 +63,23 @@ object ControllerGoogleToken {
         }
     }
 
-    fun getToken(onResult: (String?)->Unit) {
+    fun getToken(tryCount: Int = 5, onResult: (String?) -> Unit) {
         if (googleAccount != null) {
             onResult.invoke(googleAccount!!.idToken)
             return
         }
         getGoogleToken { googleAccount ->
             ControllerGoogleToken.googleAccount = googleAccount
-            if(ToolsAndroid.isDebug()){
-                if(googleAccount?.idToken == null || googleAccount.idToken!!.isEmpty()){
-                    throw RuntimeException("GOOGLE DONT'T PROVIDE TOKEN [${googleAccount?.idToken}] [${googleAccount}]")
+            if ((googleAccount?.idToken == null || googleAccount.idToken!!.isEmpty()) && tryCount > 0) {
+                ToolsThreads.main(200) { getToken(tryCount - 1, onResult) }
+            } else {
+                if (ToolsAndroid.isDebug()) {
+                    if (googleAccount?.idToken == null || googleAccount.idToken!!.isEmpty()) {
+                        throw RuntimeException("GOOGLE DONT'T PROVIDE TOKEN [${googleAccount?.idToken}] [${googleAccount}]")
+                    }
                 }
+                onResult.invoke(googleAccount?.idToken)
             }
-            onResult.invoke(googleAccount?.idToken)
         }
     }
 
