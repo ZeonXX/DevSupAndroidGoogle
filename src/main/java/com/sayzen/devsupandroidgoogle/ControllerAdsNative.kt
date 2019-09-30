@@ -8,6 +8,7 @@ import com.google.android.gms.ads.formats.UnifiedNativeAd
 import com.sup.dev.android.app.SupAndroid
 import com.sup.dev.android.tools.ToolsAndroid
 import com.sup.dev.java.libs.debug.info
+import com.sup.dev.java.libs.debug.log
 
 object ControllerAdsNative {
 
@@ -55,9 +56,13 @@ object ControllerAdsNative {
 
     fun getAdAndRelaod(): UnifiedNativeAd? {
         val ad = getAd()
+        reload()
+        return ad
+    }
+
+    fun reload(){
         this.ad = null
         loadAd(false)
-        return ad
     }
 
 }
