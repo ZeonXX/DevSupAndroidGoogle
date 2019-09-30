@@ -8,7 +8,6 @@ import com.google.android.gms.ads.formats.UnifiedNativeAd
 import com.sup.dev.android.app.SupAndroid
 import com.sup.dev.android.tools.ToolsAndroid
 import com.sup.dev.java.libs.debug.info
-import com.sup.dev.java.libs.debug.log
 
 object ControllerAdsNative {
 
