@@ -9,6 +9,7 @@ import com.sup.dev.android.app.SupAndroid
 import com.sup.dev.android.tools.ToolsAndroid
 import com.sup.dev.android.tools.ToolsIntent
 import com.sup.dev.java.libs.api_simple.client.TokenProvider
+import com.sup.dev.java.libs.debug.log
 import com.sup.dev.java.tools.ToolsThreads
 import java.lang.RuntimeException
 import java.util.concurrent.TimeUnit
@@ -65,20 +66,20 @@ object ControllerGoogleToken {
 
     fun getToken(tryCount: Int = 5, onResult: (String?) -> Unit) {
         if (googleAccount != null) {
-            onResult.invoke(googleAccount!!.idToken)
+            onResult.invoke(googleAccount!!.serverAuthCode)
             return
         }
         getGoogleToken { googleAccount ->
             ControllerGoogleToken.googleAccount = googleAccount
-            if ((googleAccount?.idToken == null || googleAccount.idToken!!.isEmpty()) && tryCount > 0) {
+            if ((googleAccount?.serverAuthCode == null || googleAccount.serverAuthCode!!.isEmpty()) && tryCount > 0) {
                 ToolsThreads.main(200) { getToken(tryCount - 1, onResult) }
             } else {
                 if (ToolsAndroid.isDebug()) {
-                    if (googleAccount?.idToken == null || googleAccount.idToken!!.isEmpty()) {
-                        throw RuntimeException("GOOGLE DONT'T PROVIDE TOKEN [${googleAccount?.idToken}] [${googleAccount}]")
+                    if (googleAccount?.serverAuthCode == null || googleAccount.serverAuthCode!!.isEmpty()) {
+                        throw RuntimeException("GOOGLE DONT'T PROVIDE TOKEN [${googleAccount?.serverAuthCode}] [${googleAccount}]")
                     }
                 }
-                onResult.invoke(googleAccount?.idToken)
+                onResult.invoke(googleAccount?.serverAuthCode)
             }
         }
     }
@@ -110,7 +111,10 @@ object ControllerGoogleToken {
 
                 ToolsIntent.startIntentForResult(Auth.GoogleSignInApi.getSignInIntent(googleApiClient)) { resultCode, intent ->
                     val result = Auth.GoogleSignInApi.getSignInResultFromIntent(intent)
-                    if (resultCode == 0 || result == null || !result.isSuccess) {
+                    val serverToken = result.signInAccount?.serverAuthCode
+                    log("serverToken[${serverToken}]")
+
+                    if (result == null || serverToken == null) {
                         onComplete.invoke(null)
                     } else
                         onComplete.invoke(result.signInAccount)
@@ -129,7 +133,13 @@ object ControllerGoogleToken {
     private fun getClient(onConnect: (GoogleApiClient) -> Unit) {
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(token)
+                .requestServerAuthCode(token)
+                .requestProfile()
+               // .requestId()
+               // .requestProfile()
+              //  .requestEmail()
+              //  .requestIdToken("")
+               // .requestIdToken(token)
                 .build()
 
         val client = GoogleApiClient.Builder(SupAndroid.activity!!)
