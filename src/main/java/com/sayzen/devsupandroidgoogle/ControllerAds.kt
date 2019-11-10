@@ -2,6 +2,7 @@ package com.sayzen.devsupandroidgoogle
 
 import com.google.ads.consent.*
 import com.sup.dev.android.app.SupAndroid
+import com.sup.dev.android.tools.ToolsStorage
 import com.sup.dev.java.classes.items.ItemNullable
 import com.sup.dev.java.libs.debug.err
 import com.sup.dev.java.tools.ToolsThreads
@@ -30,7 +31,7 @@ object ControllerAds {
         val consentInformation = ConsentInformation.getInstance(SupAndroid.activity)
         // consentInformation.addTestDevice("C4526D38EE33CA71F16EE8B8096FA4C6")
         // consentInformation.debugGeography = DebugGeography.DEBUG_GEOGRAPHY_EEA
-        val publisherIds = arrayOf(ControllerAds.key_pub)
+        val publisherIds = arrayOf(key_pub)
         consentInformation.requestConsentInfoUpdate(publisherIds, object : ConsentInfoUpdateListener {
             override fun onConsentInfoUpdated(consentStatus: ConsentStatus) {
 
@@ -44,6 +45,7 @@ object ControllerAds {
     }
 
     private fun showConsentForm() {
+        if(ToolsStorage.getBoolean("showConsentForm", false))return
         try {
             if (SupAndroid.activity == null) {
                 ToolsThreads.main(5000) { showConsentForm() }
@@ -76,6 +78,7 @@ object ControllerAds {
                     .withNonPersonalizedAdsOption()
                     .build()
             formKeeper.a = build
+            ToolsStorage.put("showConsentForm", true)
             build.load()
         }catch (e: Exception){
             err(e)
