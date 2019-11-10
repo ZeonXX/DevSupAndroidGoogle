@@ -111,9 +111,8 @@ object ControllerGoogleAuth {
 
                 ToolsIntent.startIntentForResult(Auth.GoogleSignInApi.getSignInIntent(googleApiClient)) { resultCode, intent ->
                     val result = Auth.GoogleSignInApi.getSignInResultFromIntent(intent)
-                    val idToken = result.signInAccount?.idToken
 
-                    if (result == null || idToken == null) {
+                    if (result == null || result.signInAccount?.idToken == null) {
                         onComplete.invoke(null)
                     } else
                         onComplete.invoke(result.signInAccount)
