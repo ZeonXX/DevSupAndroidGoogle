@@ -23,7 +23,6 @@ object ControllerAdsVideoReward {
     fun init(key_ads:Array<String>) {
         info("XAd", "init")
         this.key_ads = if (ControllerAds.isDebug) arrayOf(DEBUG_AD) else key_ads
-        loadAd(true)
     }
 
     fun loadAd(force: Boolean = false) {
