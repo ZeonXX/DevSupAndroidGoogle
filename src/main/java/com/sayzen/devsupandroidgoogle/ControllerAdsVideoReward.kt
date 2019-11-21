@@ -28,6 +28,8 @@ object ControllerAdsVideoReward {
     fun loadAd(force: Boolean = false) {
         if (adLoader != null && adLoader!!.isLoading) return
         if (!force && !ToolsAndroid.appIsVisible()) return
+        if (!force && isCahShow()) return
+        if (!force && isLoading) return
 
         if (keyAd >= key_ads.size) keyAd = 0
         val key_ad = key_ads[keyAd]
@@ -63,8 +65,10 @@ object ControllerAdsVideoReward {
             override fun onUserEarnedReward(p0: RewardItem) {
                 onView.invoke()
             }
-
         })
+
+        reload()
+
         return true
     }
 
