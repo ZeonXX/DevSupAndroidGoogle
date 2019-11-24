@@ -17,7 +17,7 @@ import com.sup.dev.java.tools.ToolsThreads
 
 object ControllerAdsFullscreen {
 
-    val DEBUG_AD = "xxxxxxxxxxxxxxxxxx"
+    val DEBUG_AD = "ca-app-pub-3940256099942544/1033173712"
 
     private var ad: InterstitialAd? = null
     private var lastShow = System.currentTimeMillis()
@@ -69,7 +69,9 @@ object ControllerAdsFullscreen {
         MobileAds.initialize(SupAndroid.appContext, ControllerAds.key_app)
 
 
-        ad!!.loadAd(AdRequest.Builder().addNetworkExtrasBundle(AdMobAdapter::class.java, extras).build())
+        ad!!.loadAd(AdRequest.Builder()
+                .addTestDevice("3CB63EBEE8DA616BA7FB39151F87ACDB")
+                .addNetworkExtrasBundle(AdMobAdapter::class.java, extras).build())
     }
 
 
