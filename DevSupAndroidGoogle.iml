@@ -199,5 +199,17 @@
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-ads-base:18.3.0@aar" level="project" />
     <orderEntry type="module" module-name="DevSupAndroid" />
     <orderEntry type="module" module-name="DevSupJava" />
+    <orderEntry type="module" module-name="DevSupAndroid" />
+    <orderEntry type="module" module-name="DevSupJava" />
+    <orderEntry type="module" module-name="DevSupAndroid" />
+    <orderEntry type="module" module-name="DevSupJava" />
+    <orderEntry type="module" module-name="DevSupAndroid" />
+    <orderEntry type="module" module-name="DevSupJava" />
+    <orderEntry type="module" module-name="DevSupAndroid" />
+    <orderEntry type="module" module-name="DevSupJava" />
+    <orderEntry type="module" module-name="DevSupAndroid" />
+    <orderEntry type="module" module-name="DevSupJava" />
+    <orderEntry type="module" module-name="DevSupAndroid" />
+    <orderEntry type="module" module-name="DevSupJava" />
   </component>
 </module>
