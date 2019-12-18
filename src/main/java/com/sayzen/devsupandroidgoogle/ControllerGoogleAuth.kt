@@ -8,11 +8,9 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.sup.dev.android.app.SupAndroid
 import com.sup.dev.android.tools.ToolsAndroid
 import com.sup.dev.android.tools.ToolsIntent
-import com.sup.dev.java.libs.api_simple.client.TokenProvider
 import com.sup.dev.java.tools.ToolsThreads
 import java.lang.RuntimeException
 import java.util.concurrent.TimeUnit
-
 
 object ControllerGoogleAuth {
 
@@ -30,27 +28,6 @@ object ControllerGoogleAuth {
     fun getGooglePhotoUrl(): String? {
         if (googleAccount == null || googleAccount!!.photoUrl == null) return null
         return googleAccount!!.photoUrl!!.toString()
-    }
-
-    fun instanceTokenProvider(): TokenProvider {
-        return object : TokenProvider {
-
-            override fun getToken(callbackSource: (String?) -> Unit) {
-                ControllerGoogleAuth.getToken {
-                    tokenPostExecutor.invoke(it) { token ->
-                        callbackSource.invoke(token)
-                    }
-                }
-            }
-
-            override fun clearToken() {
-                ControllerGoogleAuth.clearToken()
-            }
-
-            override fun onLoginFailed() {
-                ControllerGoogleAuth.onLoginFailed()
-            }
-        }
     }
 
     fun logout(callback: (() -> Unit)) {
