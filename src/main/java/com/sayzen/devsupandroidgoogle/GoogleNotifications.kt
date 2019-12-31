@@ -3,6 +3,7 @@ package com.sayzen.devsupandroidgoogle
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.sup.dev.java.libs.debug.info
 import com.sup.dev.java.tools.ToolsThreads
 
 class GoogleNotifications : FirebaseMessagingService() {
@@ -27,15 +28,20 @@ class GoogleNotifications : FirebaseMessagingService() {
             GoogleNotifications.onReceive = onReceive
 
             val fastToken = FirebaseInstanceId.getInstance().token
-            if(fastToken != null) onToken?.invoke(fastToken)
+            if(fastToken != null) {
+                info("XPush", "Fcm Token [$fastToken]")
+                onToken?.invoke(fastToken)
+            }
             else {
                 FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener { instanceIdResult ->
+                    info("XPush", "Fcm Token [${instanceIdResult.token}]")
                     onToken?.invoke(instanceIdResult.token)
                 }
             }
         }
 
         internal fun onReceive(remoteMessage: RemoteMessage) {
+            info("XPush", "Fcm onReceive")
             onReceive!!.invoke(remoteMessage)
         }
     }
