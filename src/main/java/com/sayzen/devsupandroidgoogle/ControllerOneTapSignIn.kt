@@ -8,7 +8,6 @@ import com.google.android.gms.common.api.ApiException
 import com.sup.dev.android.app.SupAndroid
 import com.sup.dev.android.tools.ToolsIntent
 import com.sup.dev.java.libs.debug.err
-import com.sup.dev.java.libs.debug.log
 
 object ControllerOneTapSignIn {
 
@@ -50,15 +49,13 @@ object ControllerOneTapSignIn {
                                 err(e)
                             }
                         }
-                        log("intent send")
                     } catch (e: IntentSender.SendIntentException) {
-                        log("Couldn't start One Tap UI: ${e.localizedMessage}")
                     }
                 }
                 .addOnFailureListener(SupAndroid.activity!!) { e ->
                     // No saved credentials found. Launch the One Tap sign-up flow, or
                     // do nothing and continue presenting the signed-out UI.
-                    log(e.localizedMessage)
+                    err(e.localizedMessage)
                 }
     }
 
