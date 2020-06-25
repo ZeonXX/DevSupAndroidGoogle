@@ -47,16 +47,21 @@ object ToolsInAppUpdates {
     fun isInstalling() = appUpdateInfo?.installStatus() == InstallStatus.INSTALLING
     fun isPending() = appUpdateInfo?.installStatus() == InstallStatus.PENDING
 
-    fun showDialog_Flexible() {
+    fun showDialog_Flexible(onError:(Exception)->Unit) {
         if (appUpdateInfo == null) return
         if (SupAndroid.activity == null) return
-        val appUpdateManager = AppUpdateManagerFactory.create(SupAndroid.appContext)
-        appUpdateManager.startUpdateFlowForResult(
-                appUpdateInfo,
-                AppUpdateType.FLEXIBLE,
-                SupAndroid.activity,
-                500
-        )
+        try {
+            val appUpdateManager = AppUpdateManagerFactory.create(SupAndroid.activity!!)
+            appUpdateManager.startUpdateFlowForResult(
+                    appUpdateInfo,
+                    AppUpdateType.FLEXIBLE,
+                    SupAndroid.activity,
+                    568
+            )
+        } catch (e: Exception) {
+            err(e)
+            onError.invoke(e)
+        }
     }
 
 }
