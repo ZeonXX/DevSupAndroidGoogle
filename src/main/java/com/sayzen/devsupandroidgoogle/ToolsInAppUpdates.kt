@@ -20,7 +20,7 @@ object ToolsInAppUpdates {
         if (started) return
         started = true
 
-        val appUpdateManager = AppUpdateManagerFactory.create(SupAndroid.appContext)
+        val appUpdateManager = AppUpdateManagerFactory.create(SupAndroid.appContext!!)
 
         appUpdateManager.appUpdateInfo
                 .addOnSuccessListener { appUpdateInfo ->
@@ -53,9 +53,9 @@ object ToolsInAppUpdates {
         try {
             val appUpdateManager = AppUpdateManagerFactory.create(SupAndroid.activity!!)
             appUpdateManager.startUpdateFlowForResult(
-                    appUpdateInfo,
+                    appUpdateInfo!!,
                     AppUpdateType.FLEXIBLE,
-                    SupAndroid.activity,
+                    SupAndroid.activity!!,
                     568
             )
         } catch (e: Exception) {
