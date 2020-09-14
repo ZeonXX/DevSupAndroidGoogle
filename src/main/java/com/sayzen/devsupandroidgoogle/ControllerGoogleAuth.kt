@@ -8,6 +8,7 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.sup.dev.android.app.SupAndroid
 import com.sup.dev.android.tools.ToolsAndroid
 import com.sup.dev.android.tools.ToolsIntent
+import com.sup.dev.java.classes.callbacks.CallbacksList1
 import com.sup.dev.java.tools.ToolsThreads
 import java.lang.RuntimeException
 import java.util.concurrent.TimeUnit
@@ -31,7 +32,7 @@ object ControllerGoogleAuth {
     }
 
     fun logout(callback: (() -> Unit)) {
-        getClient { googleApiClient ->
+        getGoogleApiClient { googleApiClient ->
             ToolsThreads.main {
                 googleAccount = null
                 Auth.GoogleSignInApi.signOut(googleApiClient)
@@ -41,22 +42,26 @@ object ControllerGoogleAuth {
         }
     }
 
-    fun getToken(tryCount: Int = 5, onResult: (String?) -> Unit) {
-        if (googleAccount != null) {
-            onResult.invoke(googleAccount!!.idToken)
-            return
-        }
-        getGoogleToken { googleAccount ->
-            ControllerGoogleAuth.googleAccount = googleAccount
-            if ((googleAccount?.idToken == null || googleAccount.idToken!!.isEmpty()) && tryCount > 0) {
-                ToolsThreads.main(200) { getToken(tryCount - 1, onResult) }
-            } else {
-                if (ToolsAndroid.isDebug()) {
-                    if (googleAccount?.idToken == null || googleAccount.idToken!!.isEmpty()) {
-                        throw RuntimeException("GOOGLE DONT'T PROVIDE TOKEN [${googleAccount?.idToken}] [${googleAccount}]")
-                    }
+    val callbacks = CallbacksList1<String?>()
+    var lock = 0L
+
+    fun getToken(onResult: (String?) -> Unit) {
+        ToolsThreads.main {
+            callbacks.add(onResult)
+            if(lock > 0) return@main
+            val myLock = System.currentTimeMillis()
+            lock = myLock
+            getGoogleIdToken{ token->
+                if(lock == myLock){
+                    lock = 0L
+                    callbacks.invokeAndClear(token)
                 }
-                onResult.invoke(googleAccount?.idToken)
+            }
+            ToolsThreads.main(30000){
+                if(lock == myLock){
+                    lock = 0L
+                    callbacks.invokeAndClear(null)
+                }
             }
         }
     }
@@ -77,8 +82,29 @@ object ControllerGoogleAuth {
     //  Autch
     //
 
-    fun getGoogleToken(onComplete: (GoogleSignInAccount?) -> Unit) {
-        getClient { googleApiClient ->
+
+    fun getGoogleIdToken(tryCount: Int = 5, onResult: (String?) -> Unit) {
+        if (googleAccount != null) {
+            onResult.invoke(googleAccount!!.idToken)
+            return
+        }
+        getGoogleSignInAccount { googleAccount ->
+            ControllerGoogleAuth.googleAccount = googleAccount
+            if ((googleAccount?.idToken == null || googleAccount.idToken!!.isEmpty()) && tryCount > 0) {
+                ToolsThreads.main(200) { getGoogleIdToken(tryCount - 1, onResult) }
+            } else {
+                if (ToolsAndroid.isDebug()) {
+                    if (googleAccount?.idToken == null || googleAccount.idToken!!.isEmpty()) {
+                        throw RuntimeException("GOOGLE DONT'T PROVIDE TOKEN [${googleAccount?.idToken}] [${googleAccount}]")
+                    }
+                }
+                onResult.invoke(googleAccount?.idToken)
+            }
+        }
+    }
+
+    fun getGoogleSignInAccount(onComplete: (GoogleSignInAccount?) -> Unit) {
+        getGoogleApiClient { googleApiClient ->
             val googleSignInResult = Auth.GoogleSignInApi.silentSignIn(googleApiClient).await(500, TimeUnit.MILLISECONDS)
 
             if (googleSignInResult.isSuccess && googleSignInResult.signInAccount != null) {
@@ -100,12 +126,7 @@ object ControllerGoogleAuth {
         }
     }
 
-    //
-    //  Support
-    //
-
-
-    private fun getClient(onConnect: (GoogleApiClient) -> Unit) {
+    private fun getGoogleApiClient(onConnect: (GoogleApiClient) -> Unit) {
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(serverClientId)
