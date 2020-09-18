@@ -8,6 +8,7 @@ import com.sup.dev.java.tools.ToolsThreads
 
 class GoogleNotifications : FirebaseMessagingService() {
 
+
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
         ToolsThreads.main { onReceive(remoteMessage) }

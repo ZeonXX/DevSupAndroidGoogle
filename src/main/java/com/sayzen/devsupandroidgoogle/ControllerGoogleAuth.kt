@@ -128,18 +128,29 @@ object ControllerGoogleAuth {
 
     private fun getGoogleApiClient(onConnect: (GoogleApiClient) -> Unit) {
 
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(serverClientId)
-                .build()
-
-        val client = GoogleApiClient.Builder(SupAndroid.activity!!)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .setGravityForPopups(Gravity.BOTTOM or Gravity.CENTER)
-                .build()
-
         ToolsThreads.thread {
-            client.blockingConnect()
-            onConnect.invoke(client)
+
+            var timeout = 10000
+            while (SupAndroid.activity == null && timeout > 0){
+                ToolsThreads.sleep(100)
+                timeout -= 100
+            }
+
+           ToolsThreads.main{
+               val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                       .requestIdToken(serverClientId)
+                       .build()
+
+               val client = GoogleApiClient.Builder(SupAndroid.activity!!)
+                       .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                       .setGravityForPopups(Gravity.BOTTOM or Gravity.CENTER)
+                       .build()
+
+               ToolsThreads.thread {
+                   client.blockingConnect()
+                   onConnect.invoke(client)
+               }
+           }
         }
 
     }
