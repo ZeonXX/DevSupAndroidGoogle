@@ -34,6 +34,10 @@ object ControllerGoogleAuth {
     fun logout(callback: (() -> Unit)) {
         getGoogleApiClient { googleApiClient ->
             ToolsThreads.main {
+                if(googleApiClient == null){
+                    callback.invoke()
+                    return@main
+                }
                 googleAccount = null
                 Auth.GoogleSignInApi.signOut(googleApiClient)
                 callback.invoke()
@@ -105,6 +109,12 @@ object ControllerGoogleAuth {
 
     fun getGoogleSignInAccount(onComplete: (GoogleSignInAccount?) -> Unit) {
         getGoogleApiClient { googleApiClient ->
+
+            if(googleApiClient == null){
+                ToolsThreads.main { onComplete.invoke(null) }
+                return@getGoogleApiClient
+            }
+
             val googleSignInResult = Auth.GoogleSignInApi.silentSignIn(googleApiClient).await(500, TimeUnit.MILLISECONDS)
 
             if (googleSignInResult.isSuccess && googleSignInResult.signInAccount != null) {
@@ -126,7 +136,7 @@ object ControllerGoogleAuth {
         }
     }
 
-    private fun getGoogleApiClient(onConnect: (GoogleApiClient) -> Unit) {
+    private fun getGoogleApiClient(onConnect: (GoogleApiClient?) -> Unit) {
 
         ToolsThreads.thread {
 
@@ -137,6 +147,12 @@ object ControllerGoogleAuth {
             }
 
            ToolsThreads.main{
+
+               if(SupAndroid.activity == null){
+                   onConnect.invoke(null)
+                   return@main
+               }
+
                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                        .requestIdToken(serverClientId)
                        .build()
