@@ -49,7 +49,7 @@ object ToolsInAppUpdates {
 
     fun showDialog_Flexible(onError:(Exception)->Unit) {
         if (appUpdateInfo == null) return
-        if (SupAndroid.activity == null) return
+        if (SupAndroid.activity == null || SupAndroid.activityIsDestroy) return
         try {
             val appUpdateManager = AppUpdateManagerFactory.create(SupAndroid.activity!!)
             appUpdateManager.startUpdateFlowForResult(

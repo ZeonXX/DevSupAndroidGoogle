@@ -47,7 +47,7 @@ object ControllerAds {
     private fun showConsentForm() {
         if(ToolsStorage.getBoolean("showConsentForm", false))return
         try {
-            if (SupAndroid.activity == null) {
+            if (SupAndroid.activity == null && !SupAndroid.activityIsDestroy) {
                 ToolsThreads.main(5000) { showConsentForm() }
                 return
             }

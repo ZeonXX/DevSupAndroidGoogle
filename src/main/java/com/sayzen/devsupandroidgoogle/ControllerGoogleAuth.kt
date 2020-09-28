@@ -148,7 +148,7 @@ object ControllerGoogleAuth {
 
            ToolsThreads.main{
 
-               if(SupAndroid.activity == null){
+               if(SupAndroid.activity == null || SupAndroid.activityIsDestroy){
                    onConnect.invoke(null)
                    return@main
                }
