@@ -9,6 +9,7 @@ import com.sup.dev.android.app.SupAndroid
 import com.sup.dev.android.tools.ToolsAndroid
 import com.sup.dev.android.tools.ToolsIntent
 import com.sup.dev.java.classes.callbacks.CallbacksList1
+import com.sup.dev.java.libs.debug.err
 import com.sup.dev.java.tools.ToolsThreads
 import java.lang.RuntimeException
 import java.util.concurrent.TimeUnit
@@ -34,11 +35,11 @@ object ControllerGoogleAuth {
     fun logout(callback: (() -> Unit)) {
         getGoogleApiClient { googleApiClient ->
             ToolsThreads.main {
+                googleAccount = null
                 if(googleApiClient == null){
                     callback.invoke()
                     return@main
                 }
-                googleAccount = null
                 Auth.GoogleSignInApi.signOut(googleApiClient)
                 callback.invoke()
                 googleApiClient.disconnect()
@@ -99,7 +100,7 @@ object ControllerGoogleAuth {
             } else {
                 if (ToolsAndroid.isDebug()) {
                     if (googleAccount?.idToken == null || googleAccount.idToken!!.isEmpty()) {
-                        throw RuntimeException("GOOGLE DONT'T PROVIDE TOKEN [${googleAccount?.idToken}] [${googleAccount}]")
+                        err("GOOGLE DONT'T PROVIDE TOKEN [${googleAccount?.idToken}] [${googleAccount}]")
                     }
                 }
                 onResult.invoke(googleAccount?.idToken)
@@ -110,7 +111,9 @@ object ControllerGoogleAuth {
     fun getGoogleSignInAccount(onComplete: (GoogleSignInAccount?) -> Unit) {
         getGoogleApiClient { googleApiClient ->
 
+
             if(googleApiClient == null){
+                err("ERROR google client is null googleApiClient[$googleApiClient]")
                 ToolsThreads.main { onComplete.invoke(null) }
                 return@getGoogleApiClient
             }
@@ -126,6 +129,7 @@ object ControllerGoogleAuth {
                     val result = Auth.GoogleSignInApi.getSignInResultFromIntent(intent)
 
                     if (result == null || result.signInAccount?.idToken == null) {
+                        err("ERROR google result is null result[$result] idToken[${result?.signInAccount?.idToken}]")
                         onComplete.invoke(null)
                     } else
                         onComplete.invoke(result.signInAccount)
@@ -149,6 +153,7 @@ object ControllerGoogleAuth {
            ToolsThreads.main{
 
                if(SupAndroid.activity == null || SupAndroid.activityIsDestroy){
+                   err("ERROR google activity is null activity[${SupAndroid.activity}] activityIsDestroy[${SupAndroid.activityIsDestroy}]")
                    onConnect.invoke(null)
                    return@main
                }
