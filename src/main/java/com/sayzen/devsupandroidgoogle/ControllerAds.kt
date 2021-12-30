@@ -52,7 +52,7 @@ object ControllerAds {
                 return
             }
 
-            val privacyUrl = URL("http://sayzen.ru/eng.html")
+            val privacyUrl = URL("http://campfiresayzen.net/eng.html")
 
             val formKeeper = ItemNullable<ConsentForm>(null)
             val build = ConsentForm.Builder(SupAndroid.activity, privacyUrl)
