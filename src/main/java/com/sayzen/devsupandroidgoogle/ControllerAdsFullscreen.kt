@@ -1,5 +1,5 @@
 package com.sayzen.devsupandroidgoogle
-
+/*
 import android.annotation.SuppressLint
 import android.os.Bundle
 import com.google.ads.consent.ConsentInformation
@@ -90,3 +90,5 @@ object ControllerAdsFullscreen {
 
 
 }
+
+*/

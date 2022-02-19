@@ -1,5 +1,5 @@
 package com.sayzen.devsupandroidgoogle
-
+/*
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -65,3 +65,4 @@ object ControllerAdsNative {
     }
 
 }
+*/
