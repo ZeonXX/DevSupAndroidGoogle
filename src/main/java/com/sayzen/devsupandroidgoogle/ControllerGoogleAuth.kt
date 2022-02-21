@@ -126,7 +126,7 @@ object ControllerGoogleAuth {
             } else {
 
                 ToolsIntent.startIntentForResult(Auth.GoogleSignInApi.getSignInIntent(googleApiClient)) { resultCode, intent ->
-                    val result = Auth.GoogleSignInApi.getSignInResultFromIntent(intent)
+                    val result = Auth.GoogleSignInApi.getSignInResultFromIntent(intent!!)
 
                     if (result == null || result.signInAccount?.idToken == null) {
                         err("ERROR google result is null result[$result] idToken[${result?.signInAccount?.idToken}]")
