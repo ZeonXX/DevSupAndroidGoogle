@@ -1,5 +1,5 @@
 package com.sayzen.devsupandroidgoogle
-
+/*
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.rewarded.RewardItem
@@ -78,3 +78,4 @@ object ControllerAdsVideoReward {
     }
 
 }
+*/
